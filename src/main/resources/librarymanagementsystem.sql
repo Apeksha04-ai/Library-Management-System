@@ -1,212 +1,76 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost
--- Generation Time: Apr 15, 2025 at 05:27 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Create Database
+CREATE DATABASE IF NOT EXISTS library_mgmt_system;
+USE library_mgmt_system;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- Book Table
+CREATE TABLE IF NOT EXISTS Book (
+                                    book_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                    isbn VARCHAR(20) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL,
+    publication_date DATE,
+    category VARCHAR(100),
+    image_url VARCHAR(255),
+    availability_status ENUM('Available', 'Unavailable') DEFAULT 'Available'
 
+    );
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- Author Table
+CREATE TABLE IF NOT EXISTS Author (
+                                      author_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                      author_name VARCHAR(100) NOT NULL,
+    birth_date DATE,
+    nationality VARCHAR(50),
+    awards TEXT,
+    biography TEXT
+    );
 
---
--- Database: `librarymanagementsystem`
---
+-- Book_Author (junction table for many-to-many relationship)
+CREATE TABLE IF NOT EXISTS Book_Author (
+                                           book_ID INT,
+                                           author_ID INT,
+                                           PRIMARY KEY (book_ID, author_ID),
+    FOREIGN KEY (book_ID) REFERENCES Book(book_ID) ON DELETE CASCADE,
+    FOREIGN KEY (author_ID) REFERENCES Author(author_ID) ON DELETE CASCADE
+    );
 
--- --------------------------------------------------------
+-- User Table with only Librarian and Student roles
+CREATE TABLE IF NOT EXISTS User (
+                                    user_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(20),
+    image_url VARCHAR(255),
+    password VARCHAR(255) NOT NULL,
+    role ENUM('Librarian', 'Student') NOT NULL,
+    last_login DATETIME
+    );
 
---
--- Table structure for table `author`
---
+-- Borrow Table
+CREATE TABLE IF NOT EXISTS Borrow (
+                                      borrow_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                      user_ID INT,
+                                      borrow_date DATE DEFAULT CURRENT_DATE,
+                                      FOREIGN KEY (user_ID) REFERENCES User(user_ID) ON DELETE CASCADE
+    );
 
-CREATE TABLE `author` (
-  `author_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `nationality` varchar(50) DEFAULT NULL,
-  `biography` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- Fine Table (previously called Loan)
+CREATE TABLE IF NOT EXISTS Fine (
+                                    fine_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                    borrow_ID INT,
+                                    book_ID INT,
+                                    issue_date DATE NOT NULL,
+                                    due_date DATE,
+                                    return_date DATE,
+                                    fine_amount DECIMAL(10,2) DEFAULT 0.00,
+    FOREIGN KEY (borrow_ID) REFERENCES Borrow(borrow_ID) ON DELETE CASCADE,
+    FOREIGN KEY (book_ID) REFERENCES Book(book_ID) ON DELETE CASCADE
+    );
 
--- --------------------------------------------------------
-
---
--- Table structure for table `book`
---
-
-CREATE TABLE `book` (
-  `book_id` int(11) NOT NULL,
-  `isbn` varchar(20) DEFAULT NULL,
-  `title` varchar(255) NOT NULL,
-  `publication_date` date DEFAULT NULL,
-  `availability_status` enum('available','borrowed','reserved','lost') DEFAULT 'available'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `book_author`
---
-
-CREATE TABLE `book_author` (
-  `book_id` int(11) NOT NULL,
-  `author_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `borrow`
---
-
-CREATE TABLE `borrow` (
-  `borrow_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `borrow_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `fine`
---
-
-CREATE TABLE `fine` (
-  `fine_id` int(11) NOT NULL,
-  `borrow_id` int(11) NOT NULL,
-  `book_id` int(11) NOT NULL,
-  `issue_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `due_date` datetime NOT NULL,
-  `return_date` datetime DEFAULT NULL,
-  `fine_amount` decimal(10,2) DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user`
---
-
-CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `role` enum('librarian','student') NOT NULL,
-  `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `author`
---
-ALTER TABLE `author`
-  ADD PRIMARY KEY (`author_id`);
-
---
--- Indexes for table `book`
---
-ALTER TABLE `book`
-  ADD PRIMARY KEY (`book_id`),
-  ADD UNIQUE KEY `isbn` (`isbn`);
-
---
--- Indexes for table `book_author`
---
-ALTER TABLE `book_author`
-  ADD PRIMARY KEY (`book_id`,`author_id`),
-  ADD KEY `author_id` (`author_id`);
-
---
--- Indexes for table `borrow`
---
-ALTER TABLE `borrow`
-  ADD PRIMARY KEY (`borrow_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `fine`
---
-ALTER TABLE `fine`
-  ADD PRIMARY KEY (`fine_id`),
-  ADD KEY `borrow_id` (`borrow_id`),
-  ADD KEY `book_id` (`book_id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `author`
---
-ALTER TABLE `author`
-  MODIFY `author_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `book`
---
-ALTER TABLE `book`
-  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `borrow`
---
-ALTER TABLE `borrow`
-  MODIFY `borrow_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `fine`
---
-ALTER TABLE `fine`
-  MODIFY `fine_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `book_author`
---
-ALTER TABLE `book_author`
-  ADD CONSTRAINT `book_author_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `book_author_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `borrow`
---
-ALTER TABLE `borrow`
-  ADD CONSTRAINT `borrow_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `fine`
---
-ALTER TABLE `fine`
-  ADD CONSTRAINT `fine_ibfk_1` FOREIGN KEY (`borrow_id`) REFERENCES `borrow` (`borrow_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fine_ibfk_2` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`) ON DELETE CASCADE;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_book_title ON Book(title);
+CREATE INDEX IF NOT EXISTS idx_book_isbn ON Book(isbn);
+CREATE INDEX IF NOT EXISTS idx_author_name ON Author(author_name);
+CREATE INDEX IF NOT EXISTS idx_user_email ON User(email);
+CREATE INDEX IF NOT EXISTS idx_fine_due_date ON Fine(due_date);
+CREATE INDEX IF NOT EXISTS idx_fine_return_date ON Fine(return_date);
