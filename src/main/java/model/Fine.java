@@ -1,78 +1,85 @@
 package model;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 public class Fine {
-    private int fineId;
-    private int borrowId;
-    private int bookId;
-    private String issueDate;
-    private String dueDate;
-    private String returnDate;
-    private double fineAmount;
+    private int fineID;
+    private Borrow borrow;
+    private Book book;
+    private Date issueDate;
+    private Date dueDate;
+    private Date returnDate;
+    private BigDecimal fineAmount;
 
-    public int getFineId() {
-        return fineId;
+    public Fine() {
     }
 
-    public void setFineId(int fineId) {
-        this.fineId = fineId;
+    public Fine(int fineID, Borrow borrow, Book book, Date issueDate,
+                Date dueDate, Date returnDate, BigDecimal fineAmount) {
+        this.fineID = fineID;
+        this.borrow = borrow;
+        this.book = book;
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+        this.fineAmount = fineAmount;
     }
 
-    public int getBorrowId() {
-        return borrowId;
+    // Getters and Setters
+    public int getFineID() {
+        return fineID;
     }
 
-    public void setBorrowId(int borrowId) {
-        this.borrowId = borrowId;
+    public void setFineID(int fineID) {
+        this.fineID = fineID;
     }
 
-    public int getBookId() {
-        return bookId;
+    public Borrow getBorrow() {
+        return borrow;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
+    public void setBorrow(Borrow borrow) {
+        this.borrow = borrow;
     }
 
-    public String getIssueDate() {
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Date getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(String issueDate) {
+    public void setIssueDate(Date issueDate) {
         this.issueDate = issueDate;
     }
 
-    public String getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
-    public String getReturnDate() {
+    public Date getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(String returnDate) {
+    public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
 
-    public double getFineAmount() {
+    public BigDecimal getFineAmount() {
         return fineAmount;
     }
 
-    public void setFineAmount(double fineAmount) {
-        this.fineAmount = fineAmount;
-    }
-
-    public Fine(int fineId, int borrowId, int bookId, String issueDate, String dueDate, String returnDate, double fineAmount) {
-        this.fineId = fineId;
-        this.borrowId = borrowId;
-        this.bookId = bookId;
-        this.issueDate = issueDate;
-        this.dueDate = dueDate;
-        this.returnDate = returnDate;
+    public void setFineAmount(BigDecimal fineAmount) {
         this.fineAmount = fineAmount;
     }
 }
-

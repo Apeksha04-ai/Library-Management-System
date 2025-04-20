@@ -1,37 +1,60 @@
 package model;
 
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
 public class Borrow {
-    private int borrowId;
-    private int userId;
-    private String borrowDate;
+    private int borrowID;
+    private User user;
+    private Date borrowDate;
+    private List<Fine> fines;
 
-    public int getBorrowId() {
-        return borrowId;
+    public Borrow() {
+        this.fines = new ArrayList<>();
     }
 
-    public void setBorrowId(int borrowId) {
-        this.borrowId = borrowId;
+    public Borrow(int borrowID, User user, Date borrowDate) {
+        this.borrowID = borrowID;
+        this.user = user;
+        this.borrowDate = borrowDate;
+        this.fines = new ArrayList<>();
     }
 
-    public int getUserId() {
-        return userId;
+    // Getters and Setters
+    public int getBorrowID() {
+        return borrowID;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setBorrowID(int borrowID) {
+        this.borrowID = borrowID;
     }
 
-    public String getBorrowDate() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getBorrowDate() {
         return borrowDate;
     }
 
-    public void setBorrowDate(String borrowDate) {
+    public void setBorrowDate(Date borrowDate) {
         this.borrowDate = borrowDate;
     }
 
-    public Borrow(int borrowId, int userId, String borrowDate) {
-        this.borrowId = borrowId;
-        this.userId = userId;
-        this.borrowDate = borrowDate;
+    public List<Fine> getFines() {
+        return fines;
+    }
+
+    public void setFines(List<Fine> fines) {
+        this.fines = fines;
+    }
+
+    public void addFine(Fine fine) {
+        this.fines.add(fine);
     }
 }

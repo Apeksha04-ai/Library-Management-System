@@ -1,19 +1,39 @@
 package model;
 
+import java.util.Date;
+
 public class User {
-    private int userId;
+    private int userID;
     private String name;
     private String email;
     private String phone;
-    private String role;       // Can be "Admin", "Librarian", "Student"
+    private String imageUrl;
     private String password;
+    private String role;
+    private Date lastLogin;
 
-    public int getUserId() {
-        return userId;
+    public User() {
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public User(int userID, String name, String email, String phone,
+                String imageUrl, String password, String role, Date lastLogin) {
+        this.userID = userID;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.role = role;
+        this.lastLogin = lastLogin;
+    }
+
+    // Getters and Setters
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getName() {
@@ -40,12 +60,12 @@ public class User {
         this.phone = phone;
     }
 
-    public String getRole() {
-        return role;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getPassword() {
@@ -56,12 +76,19 @@ public class User {
         this.password = password;
     }
 
-    public User(int userId, String name, String email, String phone, String role, String password) {
-        this.userId = userId;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
         this.role = role;
-        this.password = password;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 }
