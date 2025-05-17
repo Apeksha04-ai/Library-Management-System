@@ -5,6 +5,7 @@ import util.DBConnection;
 import util.PasswordUtil;
 
 import java.sql.*;
+import java.util.Date;
 
 public class UserDAO {
 
@@ -214,6 +215,7 @@ public class UserDAO {
      */
     public boolean updateUserPassword(int userID, String hashedPassword) {
         String query = "UPDATE User SET password = ? WHERE user_ID = ?";
+        System.out.println("Executing password update query for user ID: " + userID);
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -221,11 +223,16 @@ public class UserDAO {
             stmt.setString(1, hashedPassword);
             stmt.setInt(2, userID);
 
+            System.out.println("Executing SQL: " + query);
+            System.out.println("Parameters: [hashedPassword=" + hashedPassword.substring(0, 10) + "..., userID=" + userID + "]");
+
             int rowsAffected = stmt.executeUpdate();
+            System.out.println("Rows affected by password update: " + rowsAffected);
             return rowsAffected > 0;
 
         } catch (SQLException e) {
             System.err.println("Error updating user password: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -250,6 +257,28 @@ public class UserDAO {
 
         } catch (SQLException e) {
             System.err.println("Error updating user image: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Update a user's last activity time
+     * @param userID The user ID
+     * @param lastActivity The last activity timestamp
+     * @return True if update successful, false otherwise
+     */
+    public boolean updateLastActivity(int userID, Date lastActivity) {
+        String query = "UPDATE User SET last_activity = ? WHERE user_ID = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setTimestamp(1, new java.sql.Timestamp(lastActivity.getTime()));
+            stmt.setInt(2, userID);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error updating last activity: " + e.getMessage());
             return false;
         }
     }
