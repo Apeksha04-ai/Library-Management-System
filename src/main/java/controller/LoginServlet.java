@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.IOException;
+
 import dao.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,7 +12,6 @@ import model.User;
 import util.PasswordUtil;
 import util.SessionUtil;
 
-import java.io.IOException;
 
 /**
  * Servlet to handle user login
@@ -104,9 +105,9 @@ public class LoginServlet extends HttpServlet {
         String contextPath = request.getContextPath();
         
         if ("Librarian".equals(user.getRole())) {
-            response.sendRedirect(contextPath + "/views/librarian/dashboard.jsp");
+            response.sendRedirect(contextPath + "/librarian/dashboard");
         } else if ("Student".equals(user.getRole())) {
-            response.sendRedirect(contextPath + "/views/student/dashboard.jsp");
+            response.sendRedirect(contextPath + "/student/dashboard");
         } else {
             // Default fallback
             response.sendRedirect(contextPath + "/views/login.jsp");
