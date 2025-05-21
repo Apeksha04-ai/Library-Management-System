@@ -7,8 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,17 +16,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #5C6BC0;
-            --secondary-color: #3F51B5;
-            --dark-color: #303F9F;
-            --light-color: #E8EAF6;
-            --accent-color: #FF5722;
-            --success-color: #4CAF50;
-            --gradient-bg: linear-gradient(135deg, #5C6BC0 0%, #3F51B5 100%);
-            --shadow-sm: 0 2px 10px rgba(63, 81, 181, 0.1);
-            --shadow-md: 0 4px 20px rgba(63, 81, 181, 0.15);
-            --shadow-lg: 0 10px 40px rgba(63, 81, 181, 0.25);
-            --border-radius: 14px;
+            --primary-color: #6C63FF;
+            --secondary-color: #4A41D7;
+            --dark-color: #2A2F4F;
+            --light-color: #F7F7FC;
+            --accent-color: #FF6C63;
+            --success-color: #10B981;
+            --gradient-bg: linear-gradient(135deg, #6C63FF 0%, #4A41D7 100%);
+            --shadow-sm: 0 2px 10px rgba(108, 99, 255, 0.1);
+            --shadow-md: 0 4px 20px rgba(108, 99, 255, 0.2);
+            --shadow-lg: 0 10px 40px rgba(108, 99, 255, 0.3);
+            --border-radius: 16px;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -41,6 +39,8 @@
 
         body {
             background-color: var(--light-color);
+            color: #2A2F4F;
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -50,12 +50,25 @@
             background-size: 100% 50%;
         }
 
-        /* Navigation Bar Styles */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation Bar */
         .navbar {
-            background: var(--gradient-bg);
-            padding: 1rem 2rem;
-            box-shadow: var(--shadow-md);
-            position: relative;
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
             z-index: 100;
         }
 
@@ -63,109 +76,85 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 2rem;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .logo-container {
+        .nav-logo {
             display: flex;
             align-items: center;
-        }
-
-        .logo-icon {
-            font-size: 1.8rem;
-            margin-right: 0.8rem;
-            color: white;
-        }
-
-        .logo-text {
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            color: white;
-            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        .nav-logo i {
+            margin-right: 0.5rem;
         }
 
         .nav-links {
             display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 1.5rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            position: relative;
-            padding: 0.5rem 0;
-            transition: var(--transition);
-        }
-
-        .nav-links a:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: white;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover:after,
-        .nav-links a.active:after {
-            width: 100%;
-        }
-
-        .nav-buttons {
-            display: flex;
+            gap: 2rem;
             align-items: center;
         }
 
-        .nav-btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
+        .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(108, 99, 255, 0.05);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            background-color: rgba(108, 99, 255, 0.05);
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-auth-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
             font-weight: 600;
             transition: var(--transition);
-            margin-left: 1rem;
-            text-decoration: none;
-            font-size: 0.95rem;
         }
 
         .login-btn {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid transparent;
-        }
-
-        .login-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .signup-btn {
-            background-color: white;
             color: var(--primary-color);
-            border: 2px solid white;
+            border: 2px solid var(--primary-color);
         }
 
-        .signup-btn:hover {
-            background-color: rgba(255, 255, 255, 0.9);
+        .register-btn {
+            background: var(--gradient-bg);
+            color: white;
         }
 
+        .login-btn:hover, .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Mobile Menu Button */
         .mobile-menu-btn {
             display: none;
             background: transparent;
             border: none;
-            color: white;
+            color: var(--primary-color);
             font-size: 1.5rem;
             cursor: pointer;
         }
 
-        /* FAQ Page Styles */
+        /* Main Content */
         .main-content {
             flex: 1;
             padding: 3rem 2rem;
@@ -174,6 +163,7 @@
             width: 100%;
         }
 
+        /* Page Header */
         .page-header {
             text-align: center;
             margin-bottom: 3rem;
@@ -201,133 +191,13 @@
 
         .page-subtitle {
             font-size: 1.1rem;
-            color: #6B7280;
+            color: #666;
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
         }
 
-        .faq-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .faq-categories {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .category-btn {
-            padding: 0.8rem 1.5rem;
-            background: white;
-            border: 2px solid var(--light-color);
-            border-radius: 50px;
-            font-weight: 600;
-            color: var(--dark-color);
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.95rem;
-        }
-
-        .category-btn:hover, .category-btn.active {
-            background: var(--gradient-bg);
-            color: white;
-            border-color: transparent;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .category-btn i {
-            margin-right: 0.5rem;
-        }
-
-        .faq-section {
-            margin-bottom: 3rem;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            color: var(--dark-color);
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 15px;
-        }
-
-        .section-title:after {
-            content: '';
-            position: absolute;
-            width: 50px;
-            height: 3px;
-            background: var(--accent-color);
-            bottom: 0;
-            left: 0;
-            border-radius: 2px;
-        }
-
-        .faq-item {
-            background: white;
-            border-radius: var(--border-radius);
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .faq-item:hover {
-            box-shadow: var(--shadow-md);
-        }
-
-        .faq-question {
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--dark-color);
-            transition: var(--transition);
-        }
-
-        .faq-question:hover {
-            background: rgba(92, 107, 192, 0.05);
-        }
-
-        .faq-question i {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            transition: var(--transition);
-        }
-
-        .faq-answer {
-            padding: 0 1.5rem;
-            max-height: 0;
-            overflow: hidden;
-            transition: var(--transition);
-            border-top: 0 solid #E5E7EB;
-        }
-
-        .faq-answer-inner {
-            padding: 0 0 1.5rem;
-            color: #4B5563;
-            line-height: 1.8;
-        }
-
-        .faq-item.active .faq-question {
-            background: rgba(92, 107, 192, 0.05);
-        }
-
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 1000px; /* Increased max-height to accommodate longer content */
-            border-top: 1px solid #E5E7EB;
-            padding-top: 1.5rem;
-        }
-
+        /* Search Container */
         .search-container {
             margin-bottom: 3rem;
             display: flex;
@@ -367,6 +237,132 @@
             font-size: 1.2rem;
         }
 
+        /* FAQ Categories */
+        .faq-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid var(--light-color);
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--dark-color);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: var(--gradient-bg);
+            color: white;
+            border-color: transparent;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* FAQ Container */
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            bottom: 0;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        /* FAQ Items */
+        .faq-item {
+            background: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark-color);
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .faq-question i {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+            border-top: 0 solid #E5E7EB;
+        }
+
+        .faq-answer-inner {
+            padding: 0 0 1.5rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-question {
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            border-top: 1px solid #E5E7EB;
+            padding-top: 1.5rem;
+        }
+
+        /* Not Found Section */
         .faq-not-found {
             text-align: center;
             margin: 3rem 0;
@@ -387,7 +383,7 @@
 
         .not-found-subtext {
             font-size: 1rem;
-            color: #6B7280;
+            color: #666;
             margin-bottom: 2rem;
             max-width: 500px;
             margin-left: auto;
@@ -414,6 +410,7 @@
             box-shadow: var(--shadow-md);
         }
 
+        /* Help Banner */
         .help-banner {
             background: white;
             border-radius: var(--border-radius);
@@ -449,18 +446,11 @@
 
         .help-text {
             font-size: 1.1rem;
-            color: #4B5563;
+            color: #666;
             margin-bottom: 2rem;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        .help-options {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
         }
 
         .help-option {
@@ -471,9 +461,8 @@
             border-radius: var(--border-radius);
             background: #F9FAFB;
             transition: var(--transition);
-            flex: 1;
-            min-width: 200px;
-            max-width: 250px;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
         .help-option:hover {
@@ -486,7 +475,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(92, 107, 192, 0.1);
+            background: rgba(108, 99, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -495,14 +484,14 @@
             margin-bottom: 1rem;
         }
 
-        .help-option {
-            max-width: 400px; /* Increase max-width for single option */
-            margin: 0 auto; /* Center the single option */
+        .help-option-title {
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
         }
 
         .help-option-text {
             font-size: 0.9rem;
-            color: #6B7280;
+            color: #666;
             text-align: center;
             margin-bottom: 1rem;
         }
@@ -525,7 +514,7 @@
             font-size: 0.8rem;
         }
 
-        /* Premium Features Badge */
+        /* Premium Badge */
         .premium-badge {
             display: inline-flex;
             align-items: center;
@@ -547,34 +536,7 @@
             color: #333;
         }
 
-        /* Role-Based Icons */
-        .role-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            margin-right: 0.6rem;
-            font-size: 0.8rem;
-        }
-
-        .admin-icon {
-            background-color: #FF5722;
-            color: white;
-        }
-
-        .librarian-icon {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .student-icon {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        /* Role-based tags */
+        /* Role-Based Tags */
         .role-tag {
             display: inline-block;
             padding: 0.2rem 0.5rem;
@@ -587,34 +549,41 @@
         }
 
         .admin-tag {
-            background-color: rgba(255, 87, 34, 0.15);
-            color: #D84315;
+            background-color: rgba(255, 108, 99, 0.15);
+            color: #FF6C63;
         }
 
         .librarian-tag {
-            background-color: rgba(76, 175, 80, 0.15);
-            color: #2E7D32;
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #10B981;
         }
 
         .student-tag {
-            background-color: rgba(33, 150, 243, 0.15);
-            color: #1565C0;
+            background-color: rgba(108, 99, 255, 0.15);
+            color: #6C63FF;
         }
 
-        /* Footer Styles */
+        /* Footer */
         .footer {
-            background: var(--dark-color);
+            padding: 3rem 0 2rem;
+            background-color: var(--dark-color);
             color: white;
-            padding: 3rem 2rem 1.5rem;
             margin-top: auto;
         }
 
         .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 250px;
         }
 
         .footer-logo {
@@ -623,15 +592,15 @@
             margin-bottom: 1.5rem;
         }
 
-        .footer-logo-icon {
-            font-size: 1.8rem;
+        .footer-logo i {
+            color: var(--primary-color);
             margin-right: 0.8rem;
+            font-size: 1.5rem;
         }
 
-        .footer-logo-text {
-            font-size: 1.5rem;
+        .footer-logo span {
+            font-size: 1.2rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         .footer-about {
@@ -684,28 +653,6 @@
             font-size: 0.8rem;
         }
 
-        .footer-contact {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .contact-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-        }
-
-        .contact-text {
-            font-size: 0.95rem;
-            opacity: 0.8;
-        }
-
         .footer-social {
             display: flex;
             gap: 1rem;
@@ -730,41 +677,20 @@
         }
 
         .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 1.5rem;
             margin-top: 3rem;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .copyright {
+            text-align: center;
             font-size: 0.9rem;
             opacity: 0.8;
-        }
-
-        .footer-bottom-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .footer-bottom-link {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-bottom-link:hover {
-            color: white;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding: 1.5rem 2rem 0;
         }
 
         /* Responsive Styles */
         @media (max-width: 768px) {
-            .nav-links, .nav-buttons {
+            .nav-links, .nav-auth {
                 display: none;
             }
 
@@ -772,23 +698,8 @@
                 display: block;
             }
 
-            .help-options {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .help-option {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-bottom-links {
-                justify-content: center;
+            .footer-col {
+                flex: 100%;
             }
         }
 
@@ -816,20 +727,20 @@
 <!-- Navigation Bar -->
 <nav class="navbar">
     <div class="nav-container">
-        <div class="logo-container">
-            <i class="fas fa-book-reader logo-icon"></i>
-            <a href="index.jsp" class="logo-text">LibraryMS</a>
+        <a href="index.jsp" class="nav-logo">
+            <i class="fas fa-book-reader"></i>
+            LibraryMS
+        </a>
+        <div class="nav-links">
+            <a href="index.jsp" class="nav-link">Home</a>
+            <a href="about.jsp" class="nav-link">About Us</a>
+            <a href="contact.jsp" class="nav-link">Contact Us</a>
+            <a href="books.jsp" class="nav-link">Books</a>
+            <a href="faq.jsp" class="nav-link active">FAQ</a>
         </div>
-        <ul class="nav-links">
-            <li><a href="index.jsp">Home</a></li>
-            <li><a href="about.jsp">About Us</a></li>
-            <li><a href="services.jsp">Services</a></li>
-            <li><a href="contact.jsp">Contact</a></li>
-            <li><a href="faq.jsp" class="active">FAQ</a></li>
-        </ul>
-        <div class="nav-buttons">
-            <a href="login.jsp" class="nav-btn login-btn">Login</a>
-            <a href="signup.jsp" class="nav-btn signup-btn">Sign Up</a>
+        <div class="nav-auth">
+            <a href="views/login.jsp" class="nav-auth-btn login-btn">Login</a>
+            <a href="views/register.jsp" class="nav-auth-btn register-btn">Register</a>
         </div>
         <button class="mobile-menu-btn">
             <i class="fas fa-bars"></i>
@@ -983,7 +894,7 @@
                             <strong>Librarian Role:</strong>
                             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
                                 <li>Manage borrowing and returning processes</li>
-                                <li>Track book availability and reservations</li>
+                                <li>Track book availability<li>Track book availability and reservations</li>
                                 <li>Process fines and payments</li>
                                 <li>Catalog management (add, update books)</li>
                                 <li>Generate circulation reports</li>
@@ -1016,7 +927,7 @@
                 </div>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        Creating an account is simple. Click on the "Sign Up" button in the top right corner of our website. You'll need to provide basic information about your library and create administrator credentials. After completing the form, you'll receive a confirmation email with further instructions. Once your account is set up, you can start configuring your library's profile and adding resources to your catalog right away.
+                        Creating an account is simple. Click on the "Register" button in the top right corner of our website. You'll need to provide basic information about your library and create administrator credentials. After completing the form, you'll receive a confirmation email with further instructions. Once your account is set up, you can start configuring your library's profile and adding resources to your catalog right away.
 
                         <p style="margin-top: 1rem;">Note that the initial account created will have Administrator privileges. Once logged in, the Administrator can create additional accounts for librarians and student users through the user management interface.</p>
                     </div>
@@ -1448,7 +1359,6 @@
                     Send us your questions and get detailed answers
                 </p>
                 <a href="contact.jsp" class="help-link">Contact Us <i class="fas fa-arrow-right"></i></a>
-
             </div>
         </div>
     </div>
@@ -1457,10 +1367,10 @@
 <!-- Footer -->
 <footer class="footer">
     <div class="footer-container">
-        <div>
+        <div class="footer-col">
             <div class="footer-logo">
-                <i class="fas fa-book-reader footer-logo-icon"></i>
-                <span class="footer-logo-text">LibraryMS</span>
+                <i class="fas fa-book-reader"></i>
+                <span>LibraryMS</span>
             </div>
             <p class="footer-about">
                 LibraryMS is a comprehensive library management system designed to streamline operations, enhance user experience, and empower libraries of all sizes with role-based access control.
@@ -1472,64 +1382,52 @@
                 <a href="#" class="footer-social-link"><i class="fab fa-linkedin-in"></i></a>
             </div>
         </div>
-        <div>
+
+        <div class="footer-col">
             <h3 class="footer-title">Quick Links</h3>
             <ul class="footer-links">
                 <li class="footer-link"><a href="index.jsp"><i class="fas fa-chevron-right"></i> Home</a></li>
                 <li class="footer-link"><a href="about.jsp"><i class="fas fa-chevron-right"></i> About Us</a></li>
-                <li class="footer-link"><a href="services.jsp"><i class="fas fa-chevron-right"></i> Services</a></li>
                 <li class="footer-link"><a href="contact.jsp"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                <li class="footer-link"><a href="books.jsp"><i class="fas fa-chevron-right"></i> Books</a></li>
                 <li class="footer-link"><a href="faq.jsp"><i class="fas fa-chevron-right"></i> FAQ</a></li>
             </ul>
         </div>
-        <div>
+
+        <div class="footer-col">
             <h3 class="footer-title">Our Services</h3>
             <ul class="footer-links">
-                <li class="footer-link"><a href="services.jsp#catalog"><i class="fas fa-chevron-right"></i> Book Catalog</a></li>
-                <li class="footer-link"><a href="services.jsp#borrowing"><i class="fas fa-chevron-right"></i> Borrowing Management</a></li>
-                <li class="footer-link"><a href="services.jsp#users"><i class="fas fa-chevron-right"></i> User Management</a></li>
-                <li class="footer-link"><a href="services.jsp#reporting"><i class="fas fa-chevron-right"></i> Reporting & Analytics</a></li>
-                <li class="footer-link"><a href="services.jsp#online"><i class="fas fa-chevron-right"></i> Online Access</a></li>
+                <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Book Catalog</a></li>
+                <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Borrowing Management</a></li>
+                <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> User Management</a></li>
+                <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Reporting & Analytics</a></li>
+                <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Online Access</a></li>
             </ul>
         </div>
-        <div>
+
+        <div class="footer-col">
             <h3 class="footer-title">Contact Us</h3>
-            <div class="footer-contact">
-                <div class="contact-icon">
-                    <i class="fas fa-map-marker-alt"></i>
-                </div>
-                <div class="contact-text">
-                    123 Library Street, Knowledge City
-                    Education District, 54321
-                </div>
-            </div>
-            <div class="footer-contact">
-                <div class="contact-icon">
-                    <i class="fas fa-phone-alt"></i>
-                </div>
-                <div class="contact-text">
-                    +1 (123) 456-7890
-                </div>
-            </div>
-            <div class="footer-contact">
-                <div class="contact-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="contact-text">
-                    info@libraryms.com
-                </div>
-            </div>
+            <ul class="footer-links">
+                <li class="footer-link">
+                    <a href="#">
+                        <i class="fas fa-map-marker-alt"></i> 123 Library Street, Knowledge City, 54321
+                    </a>
+                </li><li class="footer-link">
+                <a href="#">
+                    <i class="fas fa-phone-alt"></i> +1 (123) 456-7890
+                </a>
+            </li>
+                <li class="footer-link">
+                    <a href="#">
+                        <i class="fas fa-envelope"></i> info@libraryms.com
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
+
     <div class="footer-bottom">
-        <div class="copyright">
-            &copy; 2025 LibraryMS. All rights reserved.
-        </div>
-        <div class="footer-bottom-links">
-            <a href="#" class="footer-bottom-link">Privacy Policy</a>
-            <a href="#" class="footer-bottom-link">Terms of Service</a>
-            <a href="#" class="footer-bottom-link">Cookie Policy</a>
-        </div>
+        &copy; 2025 LibraryMS. All rights reserved. Designed by Apeksha Neupane and The Group.
     </div>
 </footer>
 
@@ -1537,12 +1435,12 @@
     // Mobile menu toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
-    const navButtons = document.querySelector('.nav-buttons');
+    const navAuth = document.querySelector('.nav-auth');
 
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function() {
             navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            navButtons.style.display = navButtons.style.display === 'flex' ? 'none' : 'flex';
+            navAuth.style.display = navAuth.style.display === 'flex' ? 'none' : 'flex';
         });
     }
 
