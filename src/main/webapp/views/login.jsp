@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: LENOVO
-  Date: 4/20/2025
-  Time: 9:21 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -571,7 +564,7 @@
             <i class="fas fa-exclamation-circle"></i> <%= request.getAttribute("error") %>
         </div>
         <% } %>
-
+        
         <% if(session.getAttribute("registrationSuccess") != null) { %>
         <div class="system-success" style="display: block; background-color: #F0FDF4; color: #166534; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 4px solid #10B981;">
             <i class="fas fa-check-circle"></i> <%= session.getAttribute("registrationSuccess") %>
@@ -620,21 +613,21 @@
 <script>
     // Basic form validation
     const loginForm = document.getElementById('loginForm');
-
+    
     loginForm.addEventListener('submit', function(event) {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-
+        
         if (!email || !password) {
             event.preventDefault();
             alert('Please enter both email and password.');
         }
     });
-
+    
     // Show/hide password functionality
     const passwordInput = document.getElementById('password');
     const passwordIcon = passwordInput.nextElementSibling;
-
+    
     passwordIcon.addEventListener('click', function() {
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';

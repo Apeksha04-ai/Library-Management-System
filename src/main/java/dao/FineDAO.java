@@ -1,5 +1,6 @@
 package dao;
 
+import model.Fine;
 import util.DBConnection;
 
 import java.math.BigDecimal;

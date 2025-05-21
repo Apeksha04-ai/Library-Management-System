@@ -608,28 +608,28 @@
     </style>
 </head>
 <body>
-<!-- Navigation Bar -->
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="index.jsp" class="nav-logo">
-            <i class="fas fa-book-reader"></i>
-            LibraryMS
-        </a>
-        <div class="nav-links">
-            <a href="index.jsp" class="nav-link">Home</a>
-            <a href="about.jsp" class="nav-link">About Us</a>
-            <a href="contact.jsp" class="nav-link">Contact Us</a>
-            <a href="books.jsp" class="nav-link">Books</a>
-            <a href="faq.jsp" class="nav-link">FaQ </a>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.jsp" class="nav-logo">
+                <i class="fas fa-book-reader"></i>
+                LibraryMS
+            </a>
+            <div class="nav-links">
+                <a href="index.jsp" class="nav-link">Home</a>
+                <a href="about.jsp" class="nav-link">About Us</a>
+                <a href="contact.jsp" class="nav-link">Contact Us</a>
+                <a href="books.jsp" class="nav-link">Books</a>
+                <a href="faq.jsp" class="nav-link">FaQ </a>
 
 
+            </div>
+            <div class="nav-auth">
+                <a href="views/login.jsp" class="nav-auth-btn login-btn">Login</a>
+                <a href="views/register.jsp" class="nav-auth-btn register-btn">Register</a>
+            </div>
         </div>
-        <div class="nav-auth">
-            <a href="views/login.jsp" class="nav-auth-btn login-btn">Login</a>
-            <a href="views/register.jsp" class="nav-auth-btn register-btn">Register</a>
-        </div>
-    </div>
-</nav>
+    </nav>
 
 <!-- Hero Section -->
 <section class="hero">

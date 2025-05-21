@@ -11,6 +11,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Borrow;
+import model.User;
+import util.SessionUtil;
 
 @WebServlet("/librarian/return-history")
 public class ReturnHistoryServlet extends HttpServlet {
@@ -53,8 +56,8 @@ public class ReturnHistoryServlet extends HttpServlet {
         
         System.out.println("ReturnHistoryServlet: User role is: " + user.getRole());
         if (!user.getRole().equalsIgnoreCase("librarian")) {
-            System.out.println("ReturnHistoryServlet: User is not a librarian, redirecting to login page");
-            response.sendRedirect(request.getContextPath() + "/views/login.jsp");
+            System.out.println("ReturnHistoryServlet: User is not a librarian, redirecting to access denied page");
+            response.sendRedirect(request.getContextPath() + "/views/accessDenied.jsp");
             return;
         }
         

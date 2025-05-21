@@ -1,7 +1,6 @@
-
 <%--
   Created by IntelliJ IDEA.
-  User: Bijeta Maden
+  User: apekshaneupane
   Date: 20/04/2025
   Time: 14:43
   To change this template use File | Settings | File Templates.
@@ -735,7 +734,7 @@
                     </div>
                 </div>
                 <div class="team-member">
-                    <img src="${pageContext.request.contextPath}/images/Image-3.jpeg" alt="Emily Rodriguez" class="member-image">
+                    <img src="${pageContext.request.contextPath}/Users/apekshaneupane/Desktop/libarymanagementsystem/src/main/webapp/assets/images/aakriti.jpeg" alt="Emily Rodriguez" class="member-image">
                     <div class="member-info">
                         <h3 class="member-name">Emily Rodriguez</h3>
                         <p class="member-role">Head of Product</p>

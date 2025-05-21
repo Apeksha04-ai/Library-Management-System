@@ -1,4 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="model.User" %>
+<%
+    // Check if user is logged in and has appropriate role
+    User currentUser = (User) session.getAttribute("user");
+    if (currentUser == null) {
+        response.sendRedirect(request.getContextPath() + "/views/login.jsp");
+        return;
+    }
+    
+    // Redirect students to access denied page
+    if ("Student".equals(currentUser.getRole())) {
+        response.sendRedirect(request.getContextPath() + "/views/accessDenied.jsp");
+        return;
+    }
+%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">

@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import dao.AuthorDAO;
+import model.Author;
 
 @WebServlet(name = "AddAuthorServlet", urlPatterns = {"/librarian/add-author"})
 public class AddAuthorServlet extends HttpServlet {

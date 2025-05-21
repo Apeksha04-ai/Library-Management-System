@@ -11,6 +11,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Author;
+import model.Book;
+import model.User;
+import util.SessionUtil;
 
 @WebServlet("/librarian/view-books")
 public class ViewBooksServlet extends HttpServlet {
@@ -46,8 +50,8 @@ public class ViewBooksServlet extends HttpServlet {
             System.out.println("ViewBooksServlet: User role is: " + user.getRole());
             // Allow both librarian and admin to view books - using case-insensitive comparison
             if (!user.getRole().equalsIgnoreCase("librarian") && !user.getRole().equalsIgnoreCase("admin")) {
-                System.out.println("ViewBooksServlet: User role not allowed, redirecting to login");
-                response.sendRedirect(request.getContextPath() + "/views/login.jsp");
+                System.out.println("ViewBooksServlet: User role not allowed, redirecting to access denied page");
+                response.sendRedirect(request.getContextPath() + "/views/accessDenied.jsp");
                 return;
             }
             

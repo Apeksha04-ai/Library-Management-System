@@ -287,6 +287,7 @@
             color: var(--accent-color);
             font-size: 0.85rem;
             margin-top: 0.5rem;
+            font-weight: 500;
         }
 
         .role-selector {
@@ -716,6 +717,7 @@
                     <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
                     <i class="fas fa-user input-icon"></i>
                 </div>
+                <div class="error-message" id="nameError">Name cannot contain numbers</div>
             </div>
 
             <div class="form-group">
@@ -782,6 +784,22 @@
     librarianRole.addEventListener('click', function() {
         librarianRole.classList.add('active');
         studentRole.classList.remove('active');
+    });
+
+    // Name validation - no numbers allowed
+    const nameInput = document.getElementById('name');
+    const nameError = document.getElementById('nameError');
+    
+    nameInput.addEventListener('input', function() {
+        const nameValue = this.value;
+        // Check if the name contains any digits
+        if (/\d/.test(nameValue)) {
+            nameError.style.display = 'block';
+            this.setCustomValidity('Name cannot contain numbers');
+        } else {
+            nameError.style.display = 'none';
+            this.setCustomValidity('');
+        }
     });
 
     // Profile picture preview
@@ -859,6 +877,12 @@
 
     signupForm.addEventListener('submit', function(event) {
         let isValid = true;
+
+        // Name validation
+        if (/\d/.test(nameInput.value)) {
+            nameError.style.display = 'block';
+            isValid = false;
+        }
 
         // Password match validation
         if (passwordInput.value !== confirmPasswordInput.value) {

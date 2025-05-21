@@ -6,6 +6,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.WebServlet;
 import java.util.List;
 import dao.AuthorDAO;
+import model.Author;
 
 @WebServlet("/librarian/author")
 public class AuthorServlet extends HttpServlet {

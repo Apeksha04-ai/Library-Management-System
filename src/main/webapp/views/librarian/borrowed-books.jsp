@@ -983,7 +983,7 @@
                 // Calculate days late
                 const days = Math.ceil((returnDate - dueDate) / (1000 * 60 * 60 * 24));
                 const fineAmount = days * 5; // Rs. 5 per day
-                document.getElementById('fineAmount').textContent = Rs. ${fineAmount};
+                document.getElementById('fineAmount').textContent = `Rs. ${fineAmount}`;
                 document.getElementById('fineAmount').classList.remove('zero');
                 document.getElementById('fineAmountInput').value = fineAmount;
             } else {

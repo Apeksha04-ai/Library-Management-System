@@ -16,6 +16,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Borrow;
+import model.User;
+import util.SessionUtil;
 
 @WebServlet("/librarian/dashboard")
 public class LibrarianDashboardServlet extends HttpServlet {
@@ -51,8 +54,8 @@ public class LibrarianDashboardServlet extends HttpServlet {
         
         System.out.println("LibrarianDashboardServlet: User role is: " + user.getRole());
         if (!user.getRole().equalsIgnoreCase("librarian")) {
-            System.out.println("LibrarianDashboardServlet: User is not a librarian, redirecting to login page");
-            response.sendRedirect(request.getContextPath() + "/views/login.jsp");
+            System.out.println("LibrarianDashboardServlet: User is not a librarian, redirecting to access denied page");
+            response.sendRedirect(request.getContextPath() + "/views/accessDenied.jsp");
             return;
         }
         

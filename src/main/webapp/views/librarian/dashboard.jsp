@@ -1,4 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="model.User" %>
+<%
+    // Check if user is logged in and has appropriate role
+    User currentUser = (User) session.getAttribute("user");
+    if (currentUser == null) {
+        response.sendRedirect(request.getContextPath() + "/views/login.jsp");
+        return;
+    }
+    
+    // Redirect students to access denied page
+    if ("Student".equals(currentUser.getRole())) {
+        response.sendRedirect(request.getContextPath() + "/views/accessDenied.jsp");
+        return;
+    }
+    
+    // Forward to LibrarianDashboardServlet to fetch data if not already present
+    if (request.getAttribute("totalBooks") == null) {
+        System.out.println("dashboard.jsp: No data found, forwarding to servlet");
+        request.getRequestDispatcher("/librarian/dashboard").forward(request, response);
+        return;
+    }
+    System.out.println("dashboard.jsp: Data found, rendering page");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +31,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - LibraryMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
     <style>
         :root {
             --primary-color: #6C63FF;
@@ -593,315 +619,234 @@
     </style>
 </head>
 <body>
-<!-- Mobile Menu Toggle -->
-<div class="mobile-menu-toggle" id="mobileMenuToggle">
-    <i class="fas fa-bars"></i>
-</div>
+    <!-- Include the common sidebar -->
+    <jsp:include page="../components/sidebar.jsp">
+        <jsp:param name="activePage" value="dashboard"/>
+    </jsp:include>
 
-<!-- Sidebar -->
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <a href="${pageContext.request.contextPath}/views/librarian/dashboard.jsp" class="sidebar-logo">
-            <i class="fas fa-book-reader"></i>
-            <span>LibraryMS</span>
-        </a>
-    </div>
-    <ul class="nav-items">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/librarian/dashboard.jsp" class="nav-link active">
-                <i class="fas fa-chart-line"></i>
-                <span>Dashboard</span>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">
+            <i class="fas fa-chart-line"></i>
+            Dashboard
+        </h1>
+        <!-- Header Logout Button -->
+        <div class="header-actions">
+            <a href="${pageContext.request.contextPath}/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
             </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/librarian/add-books.jsp" class="nav-link">
-                <i class="fas fa-plus-circle"></i>
-                <span>Add Books</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/librarian/view-books.jsp" class="nav-link">
-                <i class="fas fa-book"></i>
-                <span>View Books</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/librarian/author.jsp" class="nav-link">
-                <i class="fas fa-pen-fancy"></i>
-                <span>Manage Authors</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/librarian/edit-book.jsp" class="nav-link ">
-                <i class="fas fa-edit"></i>
-                <span>Edit Books</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/librarian/borrowed-books.jsp" class="nav-link">
-                <i class="fas fa-clipboard-list"></i>
-                <span>Borrowed Books</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/profile.jsp" class="nav-link">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </li>
-    </ul>
-    <!-- Logout Section -->
-    <div class="logout-section">
-        <a href="${pageContext.request.contextPath}/logout" class="logout-link">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </a>
-    </div>
-</aside>
+        </div>
+    </header>
 
-<!-- Header -->
-<header class="header">
-    <h1 class="header-title">
-        <i class="fas fa-chart-line"></i>
-        Dashboard
-    </h1>
-    <!-- Header Logout Button -->
-    <div class="header-actions">
-        <a href="${pageContext.request.contextPath}/logout" class="logout-btn">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </a>
-    </div>
-</header>
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="welcome-message">Welcome, ${userName}!</h1>
 
-<!-- Main Content -->
-<main class="main-content">
-    <h1 class="welcome-message">Welcome, Admin User!</h1>
-
-    <!-- Statistics Cards -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon books">
-                <i class="fas fa-book"></i>
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon books">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="stat-title">Available Books</h3>
+                <div class="stat-value">
+                    ${totalBooks}
+                </div>
             </div>
-            <h3 class="stat-title">Total Books</h3>
-            <div class="stat-value">
-                20
+
+            <div class="stat-card">
+                <div class="stat-icon borrowings">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="stat-title">Active Borrowings</h3>
+                <div class="stat-value">
+                    ${activeBorrowingsCount}
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon overdue">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="stat-title">Overdue Books</h3>
+                <div class="stat-value">
+                    ${overdueCount}
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon fines">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <h3 class="stat-title">Total Fines</h3>
+                <div class="stat-value">
+                    Rs.${totalFines}
+                </div>
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="stat-icon borrowings">
-                <i class="fas fa-clock"></i>
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Popular Categories -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-tags"></i>
+                        Popular Categories
+                    </h2>
+                    <p class="card-subtitle">Top book categories in the library</p>
+                </div>
+                <ul class="category-list">
+                    <c:choose>
+                        <c:when test="${empty categoryData}">
+                            <li class="category-item">
+                                <p>No categories found.</p>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="maxBooks" value="0" />
+                            <c:forEach var="category" items="${categoryData}">
+                                <c:if test="${category.value > maxBooks}">
+                                    <c:set var="maxBooks" value="${category.value}" />
+                                </c:if>
+                            </c:forEach>
+                            
+                            <c:forEach var="category" items="${categoryData}">
+                                <li class="category-item">
+                                    <span class="category-name">
+                                        <c:choose>
+                                            <c:when test="${category.key eq 'History'}">
+                                                <i class="fas fa-landmark"></i>
+                                            </c:when>
+                                            <c:when test="${category.key eq 'Science'}">
+                                                <i class="fas fa-flask"></i>
+                                            </c:when>
+                                            <c:when test="${category.key eq 'Biography'}">
+                                                <i class="fas fa-user-tie"></i>
+                                            </c:when>
+                                            <c:when test="${category.key eq 'Technology'}">
+                                                <i class="fas fa-laptop-code"></i>
+                                            </c:when>
+                                            <c:when test="${category.key eq 'Art' || category.key eq 'Design' || category.key eq 'Art & Design'}">
+                                                <i class="fas fa-paint-brush"></i>
+                                            </c:when>
+                                            <c:when test="${category.key eq 'Fiction'}">
+                                                <i class="fas fa-book-open"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="fas fa-book"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        ${category.key}
+                                    </span>
+                                    <div class="category-bar">
+                                        <c:set var="percentage" value="${(category.value / maxBooks) * 100}" />
+                                        <div class="category-progress" style="width: ${percentage}%"></div>
+                                    </div>
+                                    <span class="category-count">${category.value}</span>
+                                </li>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                </ul>
             </div>
-            <h3 class="stat-title">Active Borrowings</h3>
-            <div class="stat-value">
-                6
+
+            <!-- Recent Activity -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-history"></i>
+                        Recent Activity
+                    </h2>
+                    <p class="card-subtitle">Latest borrowings and returns</p>
+                </div>
+                <ul class="activity-list">
+                    <c:choose>
+                        <c:when test="${empty recentActivity}">
+                            <li class="activity-item">
+                                <p>No recent activity found.</p>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="activity" items="${recentActivity}">
+                                <li class="activity-item">
+                                    <c:choose>
+                                        <c:when test="${empty activity.returnDate}">
+                                            <div class="activity-icon borrowed">
+                                                <i class="fas fa-book"></i>
+                                            </div>
+                                            <div class="activity-content">
+                                                <h4 class="activity-title">${activity.book.title}</h4>
+                                                <p class="activity-date">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                    Borrowed on <fmt:formatDate value="${activity.borrowDate}" pattern="MM/dd/yyyy" />
+                                                </p>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="activity-icon returned">
+                                                <i class="fas fa-check"></i>
+                                            </div>
+                                            <div class="activity-content">
+                                                <h4 class="activity-title">${activity.book.title}</h4>
+                                                <p class="activity-date">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                    Returned on <fmt:formatDate value="${activity.returnDate}" pattern="MM/dd/yyyy" />
+                                                </p>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </li>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                </ul>
             </div>
         </div>
+    </main>
 
-        <div class="stat-card">
-            <div class="stat-icon overdue">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h3 class="stat-title">Overdue Books</h3>
-            <div class="stat-value">
-                4
-            </div>
-        </div>
+    <script>
+        // Mobile menu toggle functionality
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.getElementById('sidebar');
 
-        <div class="stat-card">
-            <div class="stat-icon fines">
-                <i class="fas fa-rupee-sign"></i>
-            </div>
-            <h3 class="stat-title">Total Fines</h3>
-            <div class="stat-value">
-                Rs.255
-            </div>
-        </div>
-    </div>
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
 
-    <!-- Dashboard Grid -->
-    <div class="dashboard-grid">
-        <!-- Popular Categories -->
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h2 class="card-title">
-                    <i class="fas fa-tags"></i>
-                    Popular Categories
-                </h2>
-                <p class="card-subtitle">Top book categories in the library</p>
-            </div>
-            <ul class="category-list">
-                <li class="category-item">
-                        <span class="category-name">
-                            <i class="fas fa-landmark"></i>
-                            History
-                        </span>
-                    <div class="category-bar">
-                        <div class="category-progress" style="width: 80%"></div>
-                    </div>
-                    <span class="category-count">4</span>
-                </li>
-                <li class="category-item">
-                        <span class="category-name">
-                            <i class="fas fa-flask"></i>
-                            Science
-                        </span>
-                    <div class="category-bar">
-                        <div class="category-progress" style="width: 75%"></div>
-                    </div>
-                    <span class="category-count">4</span>
-                </li>
-                <li class="category-item">
-                        <span class="category-name">
-                            <i class="fas fa-user-tie"></i>
-                            Biography
-                        </span>
-                    <div class="category-bar">
-                        <div class="category-progress" style="width: 60%"></div>
-                    </div>
-                    <span class="category-count">3</span>
-                </li>
-                <li class="category-item">
-                        <span class="category-name">
-                            <i class="fas fa-laptop-code"></i>
-                            Technology
-                        </span>
-                    <div class="category-bar">
-                        <div class="category-progress" style="width: 45%"></div>
-                    </div>
-                    <span class="category-count">2</span>
-                </li>
-                <li class="category-item">
-                        <span class="category-name">
-                            <i class="fas fa-paint-brush"></i>
-                            Art & Design
-                        </span>
-                    <div class="category-bar">
-                        <div class="category-progress" style="width: 40%"></div>
-                    </div>
-                    <span class="category-count">2</span>
-                </li>
-            </ul>
-        </div>
+                // Change icon based on sidebar state
+                const icon = this.querySelector('i');
+                if (sidebar.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        }
 
-        <!-- Recent Activity -->
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h2 class="card-title">
-                    <i class="fas fa-history"></i>
-                    Recent Activity
-                </h2>
-                <p class="card-subtitle">Latest borrowings and returns</p>
-            </div>
-            <ul class="activity-list">
-                <li class="activity-item">
-                    <div class="activity-icon borrowed">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="activity-content">
-                        <h4 class="activity-title">Book Title 1</h4>
-                        <p class="activity-date">
-                            <i class="far fa-calendar-alt"></i>
-                            Borrowed on 4/19/2025
-                        </p>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon returned">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="activity-content">
-                        <h4 class="activity-title">Book Title 14</h4>
-                        <p class="activity-date">
-                            <i class="far fa-calendar-alt"></i>
-                            Returned on 4/29/2025
-                        </p>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon returned">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="activity-content">
-                        <h4 class="activity-title">Book Title 9</h4>
-                        <p class="activity-date">
-                            <i class="far fa-calendar-alt"></i>
-                            Returned on 4/17/2025
-                        </p>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon borrowed">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="activity-content">
-                        <h4 class="activity-title">Book Title 12</h4>
-                        <p class="activity-date">
-                            <i class="far fa-calendar-alt"></i>
-                            Borrowed on 4/7/2025
-                        </p>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon returned">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="activity-content">
-                        <h4 class="activity-title">Book Title 11</h4>
-                        <p class="activity-date">
-                            <i class="far fa-calendar-alt"></i>
-                            Returned on 4/21/2025
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</main>
+        // Add animation on page load for stats cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const statCards = document.querySelectorAll('.stat-card');
 
-<script>
-    // Mobile menu toggle functionality
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const sidebar = document.getElementById('sidebar');
+            statCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
 
-    if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-
-            // Change icon based on sidebar state
-            const icon = this.querySelector('i');
-            if (sidebar.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
+            // Add pulse effect to highlight important stats
+            const overdueCard = document.querySelector('.stat-icon.overdue');
+            setInterval(() => {
+                overdueCard.classList.add('pulse');
+                setTimeout(() => {
+                    overdueCard.classList.remove('pulse');
+                }, 1000);
+            }, 5000);
         });
-    }
-
-    // Add animation on page load for stats cards
-    document.addEventListener('DOMContentLoaded', function() {
-        const statCards = document.querySelectorAll('.stat-card');
-
-        statCards.forEach((card, index) => {
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100 * index);
-        });
-
-        // Add pulse effect to highlight important stats
-        const overdueCard = document.querySelector('.stat-icon.overdue');
-        setInterval(() => {
-            overdueCard.classList.add('pulse');
-            setTimeout(() => {
-                overdueCard.classList.remove('pulse');
-            }, 1000);
-        }, 5000);
-    });
-</script>
+    </script>
 </body>
 </html>
