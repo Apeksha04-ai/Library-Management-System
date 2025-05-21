@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    // Forward to StudentDashboardServlet to fetch data if not already present
+    if (request.getAttribute("currentlyBorrowed") == null) {
+        System.out.println("student/dashboard.jsp: No data found, forwarding to servlet");
+        request.getRequestDispatcher("/student/dashboard").forward(request, response);
+        return;
+    }
+    System.out.println("student/dashboard.jsp: Data found, rendering page");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1053,65 +1063,8 @@
     </style>
 </head>
 <body>
-<!-- Mobile Menu Toggle -->
-<div class="mobile-menu-toggle" id="mobileMenuToggle">
-    <i class="fas fa-bars"></i>
-</div>
-
-<!-- Sidebar -->
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <a href="${pageContext.request.contextPath}/views/student/dashboard.jsp" class="sidebar-logo">
-            <i class="fas fa-book-reader"></i>
-            <span>LibraryMS</span>
-        </a>
-    </div>
-    <ul class="nav-items">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/student/dashboard.jsp" class="nav-link active">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/student/search-books.jsp" class="nav-link">
-                <i class="fas fa-search"></i>
-                <span>Search Books</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/student/my-books.jsp" class="nav-link">
-                <i class="fas fa-book"></i>
-                <span>My Books</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/student/history.jsp" class="nav-link">
-                <i class="fas fa-history"></i>
-                <span>Borrowing History</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/student/fines.jsp" class="nav-link">
-                <i class="fas fa-rupee-sign"></i>
-                <span>My Fines</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/views/profile.jsp" class="nav-link">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </li>
-    </ul>
-    <!-- Logout Section -->
-    <div class="logout-section">
-        <a href="${pageContext.request.contextPath}/logout" class="logout-link">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </a>
-    </div>
-</aside>
+<c:set var="activeTab" value="dashboard" scope="request"/>
+<%@ include file="includes/sidebar.jsp" %>
 
 <!-- Header -->
 <header class="header">
@@ -1137,7 +1090,7 @@
         <div class="alert alert-error">
             <i class="fas fa-exclamation-circle"></i>
             ${sessionScope.error}
-        </div>
+            </div>
         <c:remove var="error" scope="session" />
     </c:if>
     <c:if test="${not empty sessionScope.success}">
@@ -1150,7 +1103,7 @@
 
     <!-- Quick Search Link -->
     <div class="search-container">
-        <a href="${pageContext.request.contextPath}/views/student/search-books.jsp" class="search-link">
+        <a href="${pageContext.request.contextPath}/student/search-books" class="search-link">
             <i class="fas fa-search"></i>
             Search and Borrow Books
         </a>
@@ -1194,7 +1147,7 @@
             </div>
             <h3 class="stat-title">Outstanding Fines</h3>
             <div class="stat-value">
-                Rs.${outstandingFines}
+                ₹${outstandingFines}
             </div>
         </div>
     </div>
@@ -1209,17 +1162,43 @@
                 </h2>
             </div>
             <div class="activity-list">
-                <c:forEach var="activity" items="${recentActivity}">
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas ${activity.type == 'BORROW' ? 'fa-arrow-right' : 'fa-arrow-left'}"></i>
+                <c:choose>
+                    <c:when test="${empty recentActivity}">
+                        <div class="empty-state">
+                            <i class="fas fa-history"></i>
+                            <h3>No Recent Activity</h3>
+                            <p>You haven't borrowed or returned any books recently.</p>
                         </div>
-                        <div class="activity-details">
-                            <p class="activity-title">${activity.bookTitle}</p>
-                            <p class="activity-date">${activity.date}</p>
-                        </div>
-                    </div>
-                </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="activity" items="${recentActivity}">
+                            <div class="activity-item">
+                                <div class="activity-icon ${empty activity.returnDate ? 'borrow' : 'return'}">
+                                    <i class="fas ${empty activity.returnDate ? 'fa-arrow-circle-down' : 'fa-arrow-circle-up'}"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4 class="activity-title">
+                                        ${empty activity.returnDate ? 'Borrowed' : 'Returned'}: ${activity.book.title}
+                                    </h4>
+                                    <p class="activity-date">
+                                        <c:choose>
+                                            <c:when test="${empty activity.returnDate}">
+                                                <fmt:formatDate value="${activity.borrowDate}" pattern="MMMM d, yyyy"/>
+                                                <span class="due-date">Due: <fmt:formatDate value="${activity.dueDate}" pattern="MMMM d, yyyy"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:formatDate value="${activity.returnDate}" pattern="MMMM d, yyyy"/>
+                                                <c:if test="${not empty activity.fines && activity.fines[0].fineAmount.doubleValue() > 0}">
+                                                    <span class="fine-amount">Fine: ₹${activity.fines[0].fineAmount}</span>
+                                                </c:if>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </p>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>

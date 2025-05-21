@@ -172,19 +172,33 @@
         /* Main Content */
         .main-content {
             flex: 1;
-            padding: 5rem 0;
+            padding: 3rem 0;
         }
 
         /* About Section */
         .about-section {
-            padding: 2rem 0 5rem;
+            padding: 3rem 0;
+            background-color: white;
+            position: relative;
+        }
+
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.02) 0%, rgba(74, 65, 215, 0.02) 100%);
+            pointer-events: none;
         }
 
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 3rem;
             align-items: center;
+            position: relative;
         }
 
         .about-image {
@@ -193,6 +207,12 @@
             overflow: hidden;
             box-shadow: var(--shadow-lg);
             aspect-ratio: 4/3;
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: var(--transition);
+        }
+
+        .about-image:hover {
+            transform: perspective(1000px) rotateY(0deg);
         }
 
         .about-img {
@@ -202,17 +222,29 @@
             transition: var(--transition);
         }
 
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(108, 99, 255, 0.1), rgba(74, 65, 215, 0.1));
+            pointer-events: none;
+        }
+
         .about-content {
             padding: 2rem;
         }
 
         .section-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             color: var(--dark-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             position: relative;
-            padding-bottom: 1rem;
+            padding-bottom: 1.5rem;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .section-title:after {
@@ -220,7 +252,7 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 60px;
+            width: 80px;
             height: 4px;
             background: var(--gradient-bg);
             border-radius: 2px;
@@ -228,22 +260,76 @@
 
         .about-text {
             font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 1.5rem;
+            color: #444;
+            margin-bottom: 2rem;
             line-height: 1.8;
+            letter-spacing: 0.2px;
+        }
+
+        .about-highlight {
+            background: linear-gradient(120deg, rgba(108, 99, 255, 0.1) 0%, rgba(74, 65, 215, 0.1) 100%);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .about-highlight-text {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            font-weight: 500;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .feature-icon {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-top: 0.3rem;
+        }
+
+        .feature-text {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
         }
 
         /* Mission & Vision */
         .mission-vision {
             background-color: white;
-            padding: 5rem 0;
+            padding: 3rem 0;
+            position: relative;
+        }
+
+        .mission-vision::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.02) 0%, rgba(74, 65, 215, 0.02) 100%);
+            pointer-events: none;
         }
 
         .mission-vision-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-top: 3rem;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .mission-card, .vision-card {
@@ -294,12 +380,31 @@
 
         /* Team Section */
         .team-section {
-            padding: 5rem 0;
+            padding: 3rem 0;
+            background-color: white;
+            position: relative;
+        }
+
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.02) 0%, rgba(74, 65, 215, 0.02) 100%);
+            pointer-events: none;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 0.5rem;
         }
 
         .team-grid {
@@ -382,32 +487,22 @@
         /* Stats Section */
         .stats-section {
             background: var(--gradient-bg);
-            padding: 5rem 0;
+            padding: 3rem 0;
             color: white;
             position: relative;
-        }
-
-        .stats-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Cpath fill="white" fill-opacity="0.05" d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z"%3E%3C/path%3E%3C/svg%3E');
-            pointer-events: none;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
             position: relative;
+            margin-top: 2rem;
         }
 
         .stat-item {
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 1.5rem;
             border-radius: var(--border-radius);
             background: rgba(255, 255, 255, 0.1);
             transition: var(--transition);
@@ -419,15 +514,16 @@
         }
 
         .stat-number {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             line-height: 1;
         }
 
         .stat-label {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
+            opacity: 0.9;
         }
 
         /* Footer */
@@ -538,17 +634,45 @@
             font-size: 0.9rem;
         }
 
-        /* Responsive */
+        /* Responsive Adjustments */
         @media (max-width: 992px) {
             .about-grid, .mission-vision-grid {
                 grid-template-columns: 1fr;
-                gap: 3rem;
+                gap: 2rem;
+            }
+
+            .about-image {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .about-content {
+                text-align: center;
+            }
+
+            .section-title:after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .about-features {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 2rem auto 0;
             }
         }
 
         @media (max-width: 768px) {
+            .main-content {
+                padding: 2rem 0;
+            }
+
+            .about-section, .mission-vision, .team-section, .stats-section {
+                padding: 2rem 0;
+            }
+
             .page-title {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
 
             .section-title {
@@ -569,12 +693,20 @@
         }
 
         @media (max-width: 576px) {
+            .main-content {
+                padding: 1.5rem 0;
+            }
+
+            .about-section, .mission-vision, .team-section, .stats-section {
+                padding: 1.5rem 0;
+            }
+
             .page-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             .section-title {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
 
             .team-grid {
@@ -648,19 +780,39 @@
         <div class="container">
             <div class="about-grid">
                 <div class="about-image">
-                    <img src="${pageContext.request.contextPath}/images/library-image.jpg" alt="Modern Library" class="about-img">
+                    <img src="${pageContext.request.contextPath}/images/about.jpg" alt="Modern Library" class="about-img">
                 </div>
                 <div class="about-content">
                     <h2 class="section-title">Our Story</h2>
                     <p class="about-text">
-                        Founded in 2010, LibraryMS began with a simple yet powerful vision - to revolutionize the way libraries manage their resources and serve their communities. What started as a small project by a group of librarians and software developers has grown into a comprehensive library management solution trusted by institutions worldwide.
+                        Established in 2010, LibraryMS emerged from a vision to transform library management through innovative technology. Our journey began with a dedicated team of library professionals and software experts committed to revolutionizing how libraries operate in the digital age.
                     </p>
+                    <div class="about-highlight">
+                        <p class="about-highlight-text">
+                            "We believe in empowering libraries with technology that enhances efficiency while preserving the essential human connection at the heart of every library."
+                        </p>
+                    </div>
                     <p class="about-text">
-                        Over the years, we've continually evolved our platform based on feedback from librarians, students, and administrators, ensuring that our system meets the ever-changing needs of modern libraries. Today, LibraryMS stands as a testament to our commitment to innovation, efficiency, and accessibility in library management.
+                        Through continuous innovation and user feedback, we've evolved into a comprehensive solution trusted by libraries worldwide. Our platform combines cutting-edge technology with deep understanding of library operations, ensuring seamless integration with existing workflows.
                     </p>
-                    <p class="about-text">
-                        Our team combines expertise in library science, software development, and user experience design to create a platform that is both powerful and intuitive. We believe that technology should enhance the library experience, not complicate it.
-                    </p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle feature-icon"></i>
+                            <p class="feature-text">Advanced catalog management and search capabilities</p>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle feature-icon"></i>
+                            <p class="feature-text">Intuitive user interface for staff and patrons</p>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle feature-icon"></i>
+                            <p class="feature-text">Comprehensive reporting and analytics tools</p>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle feature-icon"></i>
+                            <p class="feature-text">Secure and scalable cloud-based infrastructure</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -709,67 +861,67 @@
             </div>
             <div class="team-grid">
                 <div class="team-member">
-                    <img src="${pageContext.request.contextPath}/images/Image-1.jpeg" alt="Sarah Johnson" class="member-image">
+                    <img src="${pageContext.request.contextPath}/images/Team/Image-1.jpeg" alt="Apeksha Neupane" class="member-image">
                     <div class="member-info">
-                        <h3 class="member-name">Sarah Johnson</h3>
+                        <h3 class="member-name">Apeksha Neupane</h3>
                         <p class="member-role">Founder & CEO</p>
                         <p class="member-bio">Former librarian with over 15 years of experience who recognized the need for better library management solutions.</p>
                         <div class="social-links">
-                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/apeksha-neupane-8781b1312/" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/apeksha.neupane.71" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://github.com/Apeksha04-ai" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="team-member">
-                    <img src="${pageContext.request.contextPath}/images/Image-2.JPG" alt="Michael Chen" class="member-image">
+                    <img src="${pageContext.request.contextPath}/images/Team/Image-2.jpg" alt="Sewanta Luitel" class="member-image">
                     <div class="member-info">
-                        <h3 class="member-name">Michael Chen</h3>
+                        <h3 class="member-name">Sewanta Luitel</h3>
                         <p class="member-role">CTO</p>
                         <p class="member-bio">Tech innovator with a passion for creating intuitive software solutions for educational institutions.</p>
                         <div class="social-links">
-                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+                            <a href="linkedin.com/in/sewanta-luitel-aa00512b7" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/sewantaluitel98/" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://github.com/Sewanta07" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="team-member">
-                    <img src="${pageContext.request.contextPath}/images/Image-3.jpeg" alt="Emily Rodriguez" class="member-image">
+                    <img src="${pageContext.request.contextPath}/images/Team/Image-3.jpeg" alt="Akriti Chaudhary" class="member-image">
                     <div class="member-info">
-                        <h3 class="member-name">Emily Rodriguez</h3>
+                        <h3 class="member-name">Akriti Chaudhary</h3>
                         <p class="member-role">Head of Product</p>
-                        <p class="member-bio">User experience expert who ensures<p class="member-bio">User experience expert who ensures our platform remains user-friendly while adding powerful features.</p>
+                        <p class="member-bio">User experience expert who ensures our platform remains user-friendly while adding powerful features.</p>
                         <div class="social-links">
-                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
-                            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/akritichaudhary" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/aakriti.chaudhary.94009" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://github.com/akririchaudhary" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="team-member">
-                    <img src="${pageContext.request.contextPath}/images/Image-4.jpeg" alt="David Patel" class="member-image">
+                    <img src="${pageContext.request.contextPath}/images/Team/Image-4.jpeg" alt="Bijeta Maden" class="member-image">
                     <div class="member-info">
-                        <h3 class="member-name">David Patel</h3>
+                        <h3 class="member-name">Bijeta Maden</h3>
                         <p class="member-role">Customer Success Director</p>
                         <p class="member-bio">Dedicated to helping libraries implement and maximize the potential of our platform.</p>
                         <div class="social-links">
-                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/bijeta-maden-15518932a/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/bijeta.maden.2025?rdid=GFaTLcrrz6prlzzx&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18ZyQPRKa8%2F#" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://github.com/bijetamaden1" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="team-member">
-                    <img src="${pageContext.request.contextPath}/images/Image-5.JPG" alt="Lisa Thompson" class="member-image">
+                    <img src="${pageContext.request.contextPath}/images/Team/Image-5.jpeg" alt="Rounak Gurung" class="member-image">
                     <div class="member-info">
-                        <h3 class="member-name">Lisa Thompson</h3>
+                        <h3 class="member-name">Rounak Gurung</h3>
                         <p class="member-role">Marketing Director</p>
                         <p class="member-bio">Strategic marketing professional with expertise in educational technology and library services.</p>
                         <div class="social-links">
-                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/rounak-g-r-g-6bb93a2b5/" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/rounak.gurung.121" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://github.com/rounakgrg" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                 </div>

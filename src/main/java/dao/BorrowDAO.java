@@ -1,13 +1,21 @@
 package dao;
 
-import model.*;
-import util.DBConnection;
-
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import model.Author;
+import model.Book;
+import model.Borrow;
+import model.Fine;
+import model.User;
+import util.DBConnection;
 
 public class BorrowDAO {
     
@@ -82,53 +90,74 @@ public class BorrowDAO {
                     "WHERE b.user_ID = ? " +
                     "ORDER BY b.borrow_date DESC";
         
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try {
+            Connection conn = DBConnection.getConnection();
+            if (conn == null) {
+                throw new SQLException("Database connection failed");
+            }
             
-            stmt.setInt(1, userId);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Borrow borrow = new Borrow();
-                    borrow.setBorrowID(rs.getInt("borrow_ID"));
-                    borrow.setBorrowDate(rs.getDate("borrow_date"));
-                    borrow.setDueDate(rs.getDate("due_date"));
-                    borrow.setReturnDate(rs.getDate("return_date"));
-                    
-                    // Set book details
-                    Book book = new Book();
-                    book.setId(rs.getInt("book_ID"));
-                    book.setTitle(rs.getString("book_title"));
-                    book.setIsbn(rs.getString("isbn"));
-                    
-                    // Set author if exists
-                    String authorName = rs.getString("author_name");
-                    if (authorName != null) {
-                        Author author = new Author();
-                        author.setAuthorName(authorName);
-                        List<Author> authors = new ArrayList<>();
-                        authors.add(author);
-                        book.setAuthors(authors);
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, userId);
+                
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs == null) {
+                        throw new SQLException("ResultSet is null");
                     }
                     
-                    borrow.setBook(book);
-                    
-                    // Create and add fine if exists
-                    if (rs.getInt("fine_ID") > 0) {
-                        Fine fine = new Fine();
-                        fine.setFineID(rs.getInt("fine_ID"));
-                        fine.setIssueDate(rs.getDate("issue_date"));
-                        fine.setDueDate(rs.getDate("due_date"));
-                        fine.setReturnDate(rs.getDate("return_date"));
-                        fine.setFineAmount(rs.getBigDecimal("fine_amount"));
-                        borrow.addFine(fine);
+                    while (rs.next()) {
+                        Borrow borrow = new Borrow();
+                        borrow.setBorrowID(rs.getInt("borrow_ID"));
+                        borrow.setBorrowDate(rs.getDate("borrow_date"));
+                        borrow.setDueDate(rs.getDate("due_date"));
+                        
+                        // Handle null return date
+                        Date returnDate = rs.getDate("return_date");
+                        borrow.setReturnDate(returnDate);
+                        
+                        // Set book details
+                        Book book = new Book();
+                        book.setId(rs.getInt("book_ID"));
+                        book.setTitle(rs.getString("book_title"));
+                        book.setIsbn(rs.getString("isbn"));
+                        
+                        // Set author if exists
+                        String authorName = rs.getString("author_name");
+                        if (authorName != null) {
+                            Author author = new Author();
+                            author.setAuthorName(authorName);
+                            List<Author> authors = new ArrayList<>();
+                            authors.add(author);
+                            book.setAuthors(authors);
+                        }
+                        
+                        borrow.setBook(book);
+                        
+                        // Create and add fine if exists
+                        int fineId = rs.getInt("fine_ID");
+                        if (fineId > 0) {
+                            Fine fine = new Fine();
+                            fine.setFineID(fineId);
+                            fine.setIssueDate(rs.getDate("issue_date"));
+                            fine.setDueDate(rs.getDate("due_date"));
+                            
+                            // Handle null return date and fine amount
+                            Date fineReturnDate = rs.getDate("return_date");
+                            fine.setReturnDate(fineReturnDate);
+                            
+                            BigDecimal fineAmount = rs.getBigDecimal("fine_amount");
+                            fine.setFineAmount(fineAmount != null ? fineAmount : BigDecimal.ZERO);
+                            
+                            borrow.addFine(fine);
+                        }
+                        
+                        borrows.add(borrow);
                     }
-                    
-                    borrows.add(borrow);
                 }
             }
         } catch (SQLException e) {
+            System.err.println("Error in getBorrowsByUserId: " + e.getMessage());
             e.printStackTrace();
+            return new ArrayList<>(); // Return empty list on error
         }
         
         return borrows;
