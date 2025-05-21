@@ -16,9 +16,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Borrow;
-import model.User;
-import util.SessionUtil;
 
 @WebServlet("/librarian/dashboard")
 public class LibrarianDashboardServlet extends HttpServlet {

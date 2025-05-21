@@ -1,6 +1,5 @@
 package dao;
 
-import model.Author;
 import util.DBConnection;
 
 import java.sql.*;

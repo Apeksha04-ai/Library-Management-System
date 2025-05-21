@@ -18,8 +18,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import model.Author;
-import model.Book;
 
 @WebServlet("/librarian/add-book")
 @MultipartConfig(

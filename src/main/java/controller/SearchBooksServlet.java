@@ -10,9 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Book;
-import model.User;
-import util.SessionUtil;
 
 @WebServlet("/student/search-books")
 public class SearchBooksServlet extends HttpServlet {

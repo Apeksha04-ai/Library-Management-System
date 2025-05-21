@@ -13,9 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.User;
 import util.DBConnection;
-import util.SessionUtil;
 
 @WebServlet("/librarian/delete-book")
 public class DeleteBookServlet extends HttpServlet {

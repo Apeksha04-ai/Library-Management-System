@@ -1,6 +1,5 @@
 package dao;
 
-import model.User;
 import util.DBConnection;
 import util.PasswordUtil;
 
